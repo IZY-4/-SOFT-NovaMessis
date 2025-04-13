@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Реєстрація / Вхід</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<a href="../first_news_page/main.html" class="back-button">
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="12" fill="#FFA726"/>
+    <path d="M13.5 8l-4 4 4 4" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+</a>
+
+<div class="container">
+  <div class="tabs">
+    <button class="tab-btn active" id="registerTab" onclick="switchTab('register')">Реєстрація</button>
+    <button class="tab-btn" id="loginTab" onclick="switchTab('login')">Вхід</button>
+  </div>
+
+  <div class="role-block" id="roleBlock">
+    <p class="block-label">Ваша діяльність:</p>
+    <div class="tabs">
+      <button class="tab-btn active" id="volunteerBtn" onclick="setRole('volunteer')">Волонтер</button>
+      <button class="tab-btn" id="shelterBtn" onclick="setRole('shelter')">Притулок</button>
+    </div>
+  </div>
+
+  <div class="form-section" id="registerForm">
+    <form id="register-form">
+      <div class="input-group">
+        <input type="text" id="name" name="name" placeholder=" " required />
+        <label for="name">Ім’я</label>
+      </div>
+
+      <div class="input-group">
+        <input type="email" id="email" name="email" placeholder=" " required />
+        <label for="email">E-mail</label>
+      </div>
+
+      <div class="input-group">
+        <input type="password" id="password" name="password" placeholder=" " required oninput="validatePassword()" />
+        <label for="password">Пароль</label>
+      </div>
+
+      <ul class="password-rules" id="passwordRules">
+        <li id="length" class="invalid">– 9 або більше символів</li>
+        <li id="uppercase" class="invalid">– Велику літеру</li>
+        <li id="lowercase" class="invalid">– Малу літеру</li>
+        <li id="number" class="invalid">– Мінімум одну цифру</li>
+      </ul>
+
+      <div class="shelter-category" id="shelterCategory" style="display: none;">
+        <select>
+          <option value="">Оберіть категорію</option>
+          <option value="vet">Ветклініка</option>
+          <option value="shelter">Притулок для собак та котів</option>
+          <option value="breeder">Розплідник</option>
+        </select>
+      </div>
+
+      <button type="submit" class="submit-btn">Зареєструватися</button>
+    </form>
+  </div>
+
+  <div class="form-section" id="loginForm" style="display: none;">
+    <form>
+      <div class="input-group">
+        <input type="email" id="login-email" name="login-email" placeholder=" " required />
+        <label for="login-email">E-mail</label>
+      </div>
+      <div class="input-group">
+        <input type="password" id="login-password" name="login-password" placeholder=" " required />
+        <label for="login-password">Пароль</label>
+      </div>
+      <button type="submit" class="submit-btn">Увійти</button>
+    </form>
+  </div>
+
+  <div class="separator">Або продовжити через</div>
+  <div class="social-buttons">
+    <button class="google-btn">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 533.5 544.3" width="20" height="20">
+        <path fill="#4285F4" d="M533.5 278.4c0-18.3-1.6-36-4.6-53.2H272v100.8h146.9
+          c-6.3 34.4-25.1 63.6-53.4 83.1v68h86.3
+          c50.5-46.5 81.7-115.2 81.7-198.7z"/>
+        <path fill="#34A853" d="M272 544.3c72.6 0 133.6-24.1 178.1-65.5l-86.3-68
+          c-23.9 16.1-54.7 25.6-91.8 25.6
+          -70.5 0-130.2-47.6-151.5-111.4H32v69.9
+          C76.9 477.1 168.6 544.3 272 544.3z"/>
+        <path fill="#FBBC04" d="M120.5 324.9c-10.5-30.9-10.5-64.1 0-95
+          l-88.5-69.9C3.6 203.5-7 238.7-7 278.4
+          s10.6 74.9 29 118.4l88.5-71.9z"/>
+        <path fill="#EA4335" d="M272 107.5c39.5 0 75.1 13.6 103.1 40.3
+          l77.2-77.2C409.8 25.3 348.8 0 272 0
+          168.6 0 76.9 67.2 32 167.9l88.5 69.9
+          c21.3-63.8 81-111.4 151.5-111.4z"/>
+      </svg>
+      Google
+    </button>
+
+    <button class="facebook-btn">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" width="20" height="20">
+        <path fill="white" d="M279.14 288l14.22-92.66h-88.91v-60.13
+          c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26
+          S261.65 0 225.36 0c-73.14 0-121 44.38-121 124.72v70.62H22.89V288
+          h81.47v224h100.2V288z"/>
+      </svg>
+      Facebook
+    </button>
+  </div>
+</div>
+
+<script>
+  let currentRole = 'volunteer';
+
+  function switchTab(tab) {
+    document.getElementById('registerForm').style.display = (tab === 'register') ? 'block' : 'none';
+    document.getElementById('loginForm').style.display = (tab === 'login') ? 'block' : 'none';
+    document.getElementById('roleBlock').style.display = (tab === 'register') ? 'block' : 'none';
+
+    document.getElementById('registerTab').classList.toggle('active', tab === 'register');
+    document.getElementById('loginTab').classList.toggle('active', tab === 'login');
+  }
+
+  function setRole(role) {
+    currentRole = role;
+    document.getElementById('volunteerBtn').classList.toggle('active', role === 'volunteer');
+    document.getElementById('shelterBtn').classList.toggle('active', role === 'shelter');
+    document.getElementById('shelterCategory').style.display = (role === 'shelter') ? 'block' : 'none';
+  }
+
+  function validatePassword() {
+    const password = document.getElementById('password').value;
+    document.getElementById('length').className = password.length >= 9 ? 'valid' : 'invalid';
+    document.getElementById('uppercase').className = /[A-ZА-ЯІЇЄҐ]/.test(password) ? 'valid' : 'invalid';
+    document.getElementById('lowercase').className = /[a-zа-яіїєґ]/.test(password) ? 'valid' : 'invalid';
+    document.getElementById('number').className = /\d/.test(password) ? 'valid' : 'invalid';
+  }
+
+  window.onload = () => {
+    setRole('volunteer');
+  };
+
+  document.getElementById('register-form').addEventListener('submit', function(e) {
+    e.preventDefault(); // блокуємо стандартну відправку
+    if (currentRole === 'volunteer') {
+      window.location.href = '../main_volontier/main_volontier.html';
+    }
+    else if (currentRole === 'shelter') {
+  window.location.href = '../main_pritulok/main_pritulok.html';
+}
+
+  });
+</script>
+</body>
+</html>
